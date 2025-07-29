@@ -33,7 +33,7 @@ def main():
     st.set_page_config(page_title="IL income ≠", layout="centered")
 
     st.title("Income and Inequality in Illinois: Who owns Illinois' income and where do they get it?")
-    st.markdown("An analysis of income distribution and sources of income in Illinois using IRS Statistics of Income data. The data include total income by type vis-a-vis 1040 forms and the IRS' percentile data.")
+    st.markdown("An analysis of income distribution in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income). See “Notes on data source” at the bottom. The analysis looks at:<br> - The share of total income reported in Illinois relative to the share of tax returns by income category (figure 1), among millionaire’s and billionaire’s over time (Figure 2), and by income percentile over time (figure 3).<br> - The source of income by income category (figure 4) and share of income by source and income category (figure 5).<br> - The source of income by income percentile (figure 6) and share of income by source by income percentile (figure 7).")
     
     st.header("Income inequality")
     
@@ -46,11 +46,20 @@ def main():
     top_10 = dfx['agi_10'].unique()[0]
     top_50 = dfx['agi_50'].unique()[0]
 
-    st.markdown("First, I show the share of tax filers by income categoery versus their share of income.")
-    st.markdown(" - Those making $1M or more make up one-half of one percent of tax filers but have about 17% of all income (Fig. 1).")
-    st.markdown(" - Pre-COVID, millionaires\' and billionaires\' share of income was about 14% (2012-2020). Their average share (2021 and 2022) increased to 20% (Fig. 2).")
-    st.markdown(f" - In 2022, the top 1% of tax files held about 21% of all income in Illinois. The top 5% held about 36%. And the top 10% held 47% (Fig. 3). For reference, to the annual gross income (AGI) cut off for individuals to be part of the top 1% in 2022 was \\${top_01:,.0f}. For the top 5% it was \\${top_05:,.0f}. For the top 10% it was \\${top_10:,.0f}. And for the top 50% it was \\${top_50:,.0f}.")
-    st.markdown(" - Post-COVID income shares among the top 1%, 5%, and 10% seem to have increased slightly post-COVID (Fig. 3).")
+    st.markdown("""
+                Who owns Illinois’ income?<br>
+                *In 2022, millionaires and billionaires owned a disproportionate share of Illinois’ reported income.* They made up one-half of one percent of tax returns but owned 17% of all income (Figure 1). *The top 1% owned about 21% of all income in Illinois (Figure 3).* The annual gross income cut off for the 1% was \\${top_01:,.0f}. <br>
+                *Millionaires’ and billionaires’ share of income may be rising slightly post-COVID.* Prior to COVID, millionaires' and billionaires' share of income was about 14% (the 2012 to 2020 average). Their average 2021-2022 share increased to 20% (Figure 2). Figure 8 provides context for the 2020-2022 trends. An increase in the share of income of capital gains contributed to the 2021 spike (77% of which are owned by the top 1% (Figure 7) and 71% owned by millionaires and billionaires (Figure 5 filtered for Capital Gains)). In addition, the share of S-Corp income is slightly increasing. Millionaires and billionaires own about 65% of S-Corp income and the top 1% own about 71%. <br>
+                """)
+                
+                
+                
+                
+# First, I show the share of tax filers by income categoery versus their share of income.")
+#     st.markdown(" - Those making $1M or more make up one-half of one percent of tax filers but have about 17% of all income (Fig. 1).")
+#     st.markdown(" - Pre-COVID, millionaires\' and billionaires\' share of income was about 14% (2012-2020). Their average share (2021 and 2022) increased to 20% (Fig. 2).")
+#     st.markdown(f" - In 2022, the top 1% of tax files held about 21% of all income in Illinois. The top 5% held about 36%. And the top 10% held 47% (Fig. 3). For reference, to the annual gross income (AGI) cut off for individuals to be part of the top 1% in 2022 was \\${top_01:,.0f}. For the top 5% it was \\${top_05:,.0f}. For the top 10% it was \\${top_10:,.0f}. And for the top 50% it was \\${top_50:,.0f}.")
+#     st.markdown(" - Post-COVID income shares among the top 1%, 5%, and 10% seem to have increased slightly post-COVID (Fig. 3).")
         
     # Income categoery data
     
