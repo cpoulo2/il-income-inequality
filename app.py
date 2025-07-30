@@ -61,7 +61,7 @@ Below I provide a summary of findings followed by the income distribution figure
     change = (diff)/y2012
 
     st.markdown(f"""
-                Between 2012 and 2022, total AGI in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth in income, however, is shared unevenly across income groups.
+                Between 2012 and 2022, total annual gross income in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth in income, however, is shared unevenly across income groups.
                 
                 **In 2022, the top 1% and especially millionaires and billionaires (the top 0.5%) recieved a disproportionate share of Illinois' reported income.** 
                 
