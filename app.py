@@ -23,8 +23,6 @@ def main():
     # Load data
     df = load_data()
     
-    
-
     if df is None:
         return
 
@@ -32,25 +30,55 @@ def main():
     
     st.set_page_config(page_title="IL income ≠", layout="centered")
 
-    st.title("Income and Inequality in Illinois: Who owns Illinois' income and where do they get it?")
-    st.markdown("An analysis of income distribution in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income). See “Notes on data source” at the bottom. The analysis looks at:<br> - The share of total income reported in Illinois relative to the share of tax returns by income category (figure 1), among millionaire’s and billionaire’s over time (Figure 2), and by income percentile over time (figure 3).<br> - The source of income by income category (figure 4) and share of income by source and income category (figure 5).<br> - The source of income by income percentile (figure 6) and share of income by source by income percentile (figure 7).")
+    st.title("Who gets Illinois' income and how do they get it?")
+    st.markdown("""
+The following analysis looks at distribution of reported income in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income). See ["Notes on data source"](#notes-on-data-source) at the bottom. I analyze the following:
+- The share of total income versus share of tax returns filed 1) by income group ([Figure 1](#figure-1-share-of-illinois-total-income-versus-tax-returns-by-income-group-2022)), 2) for millionaire's and billionaire's over time ([Figure 2](#figure-2-millionaires-and-billionaires-share-of-illinois-total-income-versus-tax-returns-2012-2022)), and 3) by income percentile over time ([Figure 3](#figure-3-share-of-illinois-total-income-by-percentile-2013-2022)).
+- Source of income and their share across income groups ([Figure 4](#figure-4-source-of-income-by-income-group-2022) and [Figure 5](#figure-5-share-of-income-source-by-income-group-2022)) and across income percentiles ([Figure 6](#figure-6-source-of-income-by-percentile-2022) and [Figure 7](#figure-7-share-of-income-source-by-percentile-2022)).
+- The share of income by source over time ([Figure 8](#figure-8-share-of-income-by-source-over-time-2012-2022)).
+
+Below I provide a summary of findings followed by the income distribution figures.
+""", unsafe_allow_html=True)
     
-    st.header("Income inequality")
+
+    st.header("Summary of findings")
     
     # get agi's for top 01, 05, 10, and 50
-    dfx = df.copy()
-    dfx = dfx[dfx['year'] == 2022]
+    dfx = df[df['year'] == 2022]
     dfx = dfx[dfx['state'] == "IL"]
     top_01 = dfx['agi_01'].unique()[0]
     top_05 = dfx['agi_05'].unique()[0]
     top_10 = dfx['agi_10'].unique()[0]
     top_50 = dfx['agi_50'].unique()[0]
+    
+    # Get total agi change from 2012 to 2022
+    y2022 = df[(df['year'] == 2022) & (df['state'] == "IL")]['agi'].sum() 
+    y2012 = df[(df['year'] == 2012) & (df['state'] == "IL")]['agi'].sum()
+    
+    diff = y2022-y2012
+    diff_m = diff/1000000  # Convert to millions
+    y2022_b = y2022 / 1000000000  # Convert to billions
+    change = (diff)/y2012
 
-    st.markdown("""
-                Who owns Illinois’ income?<br>
-                *In 2022, millionaires and billionaires owned a disproportionate share of Illinois’ reported income.* They made up one-half of one percent of tax returns but owned 17% of all income (Figure 1). *The top 1% owned about 21% of all income in Illinois (Figure 3).* The annual gross income cut off for the 1% was \\${top_01:,.0f}. <br>
-                *Millionaires’ and billionaires’ share of income may be rising slightly post-COVID.* Prior to COVID, millionaires' and billionaires' share of income was about 14% (the 2012 to 2020 average). Their average 2021-2022 share increased to 20% (Figure 2). Figure 8 provides context for the 2020-2022 trends. An increase in the share of income of capital gains contributed to the 2021 spike (77% of which are owned by the top 1% (Figure 7) and 71% owned by millionaires and billionaires (Figure 5 filtered for Capital Gains)). In addition, the share of S-Corp income is slightly increasing. Millionaires and billionaires own about 65% of S-Corp income and the top 1% own about 71%. <br>
-                """)
+    st.markdown(f"""
+                Between 2012 and 2022, total AGI in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth in income, however, is shared unevenly across income groups.
+                
+                **In 2022, the top 1% and especially millionaires and billionaires (the top 0.5%) recieved a disproportionate share of Illinois' reported income.** 
+                
+                That year, **the top 1% of Illinois' tax filers claimed about 21% of Illinois's income** (Figure 3)--with a annual gross income threashold of \\${top_01:,.0f}. Millionaires and billionaires (the top one-half of one percent) took home 17% of Illinois' total income (Figure 1). 
+                
+                **Much of the income reported by the top 1%, didn't come from wages or salaries, but from owning things other than their labor (business, equity, and assets).**
+                
+                Roughly **three-quarters of the income of the top 1% came from "passive sources"**--which the IRS defines as activities in which the tax filer does not materially participate in, such as S corporation profits, divdends, or capital gains. By contrast, **about 80% of income reported by the bottom half of tax filers came from wages and salaries** (Figure 6). 
+                
+                Viewed from another perspective, the lion's share of passive income flowed to the very top. For example, **71% of all capital gains income and 65% of all S corporation income** went to millionaires and billionaires (Figure 5).  
+                
+                **Since 2020, the share of income going to the top 1% and the top 0.5% has grown.** 
+                
+                Prior to COVID, millionaires' and billionaires' averaged about 14% of total income between 2012 and 2020. That share increased to 20% between 2021 and 2022 (Figure 2). 
+                
+                Figure 8 provides context for the 2020-2022 trends. An increase in the share of income of capital gains contributed to the 2021 spike in the share of income going to the top 1%. In addition, the share of S corporation income as is slightly increasing. Millionaires and billionaires own about 65% of S corporation income (Figure 5 filtered for "S-Corp") and the top 1% own about 71% (Figure 7).
+                """, unsafe_allow_html=True)
                 
                 
                 
@@ -62,10 +90,9 @@ def main():
 #     st.markdown(" - Post-COVID income shares among the top 1%, 5%, and 10% seem to have increased slightly post-COVID (Fig. 3).")
         
     # Income categoery data
-    
-    amt_dist = df.copy()
+    st.subheader("Figure 1: Share of Illinois' Total Income Versus Tax Returns by Income Group (2022)")
     # Remove agi_stub_cat = 0
-    amt_dist = amt_dist[amt_dist['agi_stub'] != 0]
+    amt_dist = df[df['agi_stub'] != 0]
     amt_dist = amt_dist[(amt_dist['year'] == 2022) & (amt_dist['state'] == "IL")]
     amt_dist = amt_dist[["state","agi_stub_cat","agi_stub","returns","inc"]]
     amt_dist['Tax returns'] = amt_dist['returns'] / amt_dist['returns'].sum()
@@ -75,19 +102,18 @@ def main():
     amt_dist = amt_dist.sort_values('agi_stub')
     
     # Reshape data for plotly - need long format
-    amt_dist_long = pd.melt(amt_dist, 
+    amt_dist = pd.melt(amt_dist, 
                            id_vars=['agi_stub_cat', 'agi_stub'], 
                            value_vars=['Tax returns', 'Income'],
                            var_name='Legend',
                            value_name='Percentage')
     
     # Create plotly bar chart
-    fig = px.bar(amt_dist_long,
+    fig = px.bar(amt_dist,
                 x='agi_stub_cat',
                 y='Percentage',
                 color='Legend',
-                title='Figure 1: Share of Illinois\' Total Income Versus Tax Returns by Income Category (2022)',
-                labels={'agi_stub_cat': 'Income Category', 
+                labels={'agi_stub_cat': 'Income Group', 
                        'Percentage': 'Percent of Total'},
                 barmode='group',
                 color_discrete_map={'Tax returns': 'blue', 'Income': 'red'},
@@ -108,34 +134,34 @@ def main():
     st.plotly_chart(fig, use_container_width=True)
      
     
+    st.subheader("Figure 2: Millionaires' and Billionaires' Share of Illinois' Total Income Versus Tax Returns (2012-2022)")
+    
     # Millionaire and billionaire share of income over time
-    amt_dist_time = df.copy()
     
     # Exclude agi_stub_cat = 0
-    amt_dist_time = amt_dist_time[amt_dist_time['agi_stub'] != 0]
+    amt_dist = df[df['agi_stub'] != 0]
     
-    amt_dist_time = amt_dist_time[(amt_dist_time['state'] == "IL")]
-    amt_dist_time = amt_dist_time[["state",'year',"agi_stub_cat","agi_stub","returns","inc"]]
+    amt_dist = amt_dist[(amt_dist['state'] == "IL")]
+    amt_dist = amt_dist[["state",'year',"agi_stub_cat","agi_stub","returns","inc"]]
     
     # Get millionaire data separately
-    amt_dist_mil = amt_dist_time[amt_dist_time['agi_stub'] == 10].groupby('year')[['returns','inc']].sum().reset_index()
+    amt_dist_mil = amt_dist[amt_dist['agi_stub'] == 10].groupby('year')[['returns','inc']].sum().reset_index()
     amt_dist_mil = amt_dist_mil.rename(columns={'returns': 'returns_10', 'inc': 'inc_10'})
     
     # Get total data (all income categories)
-    amt_dist_total = amt_dist_time.groupby('year')[['returns','inc']].sum().reset_index()
+    amt_dist = amt_dist.groupby('year')[['returns','inc']].sum().reset_index()
     
     # Merge millionaire and total data
-    amt_dist_time = amt_dist_total.merge(amt_dist_mil, on='year')
+    amt_dist = amt_dist.merge(amt_dist_mil, on='year')
     
     # Calculate shares
-    amt_dist_time['Tax returns'] = amt_dist_time['returns_10'] / amt_dist_time['returns']
-    amt_dist_time['Income'] = amt_dist_time['inc_10'] / amt_dist_time['inc']
+    amt_dist['Tax returns'] = amt_dist['returns_10'] / amt_dist['returns']
+    amt_dist['Income'] = amt_dist['inc_10'] / amt_dist['inc']
 
     # Show a line graph comparing share of income (Income) and share of tax returns (Tax returns) for millionaires over time
-    fig = px.line(amt_dist_time, 
+    fig = px.line(amt_dist, 
                   x='year', 
                   y='Income', 
-                  title='Figure 2: Millionaires\' and Billionaires\' Share of Illinois\' Total Income Versus <br>Tax Returns (2012 and 2022)',
                   labels={'year': 'Year', 'Income': 'Share of Income'},
                   markers=True)
 
@@ -145,8 +171,8 @@ def main():
                      hovertemplate="<b>%{x}</b><br>Share of Income: %{y:.1%}<extra></extra>")
     
     # Add the second trace (Tax returns line)
-    fig.add_scatter(x=amt_dist_time['year'], 
-                    y=amt_dist_time['Tax returns'], 
+    fig.add_scatter(x=amt_dist['year'], 
+                    y=amt_dist['Tax returns'], 
                     mode='lines+markers', 
                     name='Share of Tax Returns', 
                     line=dict(color='blue'),
@@ -159,11 +185,12 @@ def main():
     # Show the chart
     st.plotly_chart(fig, use_container_width=True)
     
+    st.subheader("Figure 3: Share of Illinois\' Total Income by Percentile (2013-2022)")
+    
     # Percentile data
     
-    pctile_dist = df.copy()
     # Keep only one row of percentile data per year
-    pctile_dist = pctile_dist[pctile_dist['agi_stub'] == 0]
+    pctile_dist = df[df['agi_stub'] == 0]
     pctile_dist = pctile_dist[(pctile_dist['state'] == "IL")]
     pctile_dist['bottom_50'] = pctile_dist['total_agi'] - pctile_dist['sum_agi_50']
     pctile_dist['bottom_50_sal'] = pctile_dist['total_sal_amt'] - pctile_dist['sum_sal_50']  
@@ -198,7 +225,6 @@ def main():
     fig = px.line(pctile_dist, 
                   x='year', 
                   y=['Top 1%', 'Top 5%', 'Top 10%', 'Bottom 50%'],
-                  title='Figure 3: Share of Illinois\' Total Income by Percentile (2013-2022)',
                   labels={'year': 'Year', 'value': 'Share of Income', 'variable': 'Percentile'},
                   markers=True,
                   color_discrete_map={'Top 1%': 'blue', 'Top 5%': 'orange', 'Top 10%': 'green', 'Bottom 50%': 'red'})
@@ -215,7 +241,7 @@ def main():
     st.plotly_chart(fig, use_container_width=True)
     
     # Share of income
-    
+    st.subheader("Figure 4: Source of Income by Income Group (2022)")
     # Create a 2022 dataframe with IL data on source of income by income group
     source_income = df.copy()
     source_income = source_income[(source_income['year'] == 2022) & (source_income['state'] == "IL")]
@@ -255,8 +281,7 @@ def main():
                  x='agi_stub_cat', 
                  y='Source of Income (%)', 
                  color='Income Source',
-                 title='Figure 4: Source of Income for Each Income Group (2022)',
-                 labels={'agi_stub_cat': 'Income Category', 'Source of Income (%)': 'Share of Income'},
+                 labels={'agi_stub_cat': 'Income Group', 'Source of Income (%)': 'Share of Income'},
                  barmode='group',
                  color_discrete_sequence=px.colors.qualitative.Pastel)
     # Update layout for better appearance and formatting
@@ -271,14 +296,13 @@ def main():
     st.plotly_chart(fig, use_container_width=True)
     
     
-    
+    st.subheader("Figure 5: Share of Income Source by Income Group (2022)")
     # Create a bar chart showing the share of income by source of income for each income group
     fig = px.bar(source_income, 
                  x='agi_stub_cat', 
                  y='Share of Income (%)', 
                  color='Income Source',
-                 title='Figure 5: Share of Income by Source for Each Income Group in Illinois (2022)',
-                 labels={'agi_stub_cat': 'Income Category', 'Share of Income (%)': 'Share of Income'},
+                 labels={'agi_stub_cat': 'Income Group', 'Share of Income (%)': 'Share of Income'},
                  barmode='group',
                  color_discrete_sequence=px.colors.qualitative.Pastel)
     # Update layout for better appearance and formatting
@@ -293,6 +317,8 @@ def main():
     st.plotly_chart(fig, use_container_width=True)
 
     # Income by source for percentiles
+    
+    st.subheader("Figure 6. Source of Income by Percentile (2022)")
     
     inc_share_df = pctile_dist.copy()
     inc_share_df = inc_share_df[inc_share_df['year'] == 2022]
@@ -339,7 +365,7 @@ def main():
     # Create a DataFrame for the income shares
     income_shares = pd.DataFrame({
         'Percentile': cats,
-        'Wages': wages,
+        'Wages and Salaries': wages,
         'Interest': interest,
         'Dividends': dividends,
         'Business': business,
@@ -351,8 +377,7 @@ def main():
     income_shares_long = income_shares.melt(id_vars='Percentile', var_name='Income Source', value_name='Share')
 
     # Use plotly to create a bar chart
-    fig = px.bar(income_shares_long, x='Percentile', y='Share', color='Income Source',
-                 title="Figure 6. Source of Income by Percentile (2022)")
+    fig = px.bar(income_shares_long, x='Percentile', y='Share', color='Income Source')
     fig.update_layout(barmode='group', xaxis_title='Income Percentile', yaxis_title='Share of Income')
     fig.update_traces(hovertemplate="<b>%{x}</b><br>" +
                      "%{fullData.name} share: %{y:.1%}" +
@@ -361,6 +386,8 @@ def main():
     fig.update_layout(yaxis_tickformat='%')
     fig.update_yaxes(tickformat='.0%')
     st.plotly_chart(fig)
+    
+    st.subheader("Figure 7. Share of Income Source by Percentile (2022)")
     
     wages_share = [(inc_share_df['bottom_50_sal']/ inc_share_df['total_sal_amt']).iloc[0],
          (inc_share_df['sum_sal_01']/ inc_share_df['total_sal_amt']).iloc[0],
@@ -395,7 +422,7 @@ def main():
     # Create a DataFrame for the income shares
     income_shares_share = pd.DataFrame({
         'Percentile': cats,
-        'Wages': wages_share,
+        'Wages and Salaries': wages_share,
         'Interest': interest_share,
         'Dividends': dividends_share,
         'Business': business_share,
@@ -407,8 +434,7 @@ def main():
     income_shares_share_long = income_shares_share.melt(id_vars='Percentile', var_name='Income Source', value_name='Share')
 
     # Use plotly to create a bar chart
-    fig = px.bar(income_shares_share_long, x='Percentile', y='Share', color='Income Source',
-                 title="Figure 7. Share of Income Type by Percentile (2022)")
+    fig = px.bar(income_shares_share_long, x='Percentile', y='Share', color='Income Source')
     fig.update_layout(barmode='group', xaxis_title='Income Percentile', yaxis_title='Share of Income Type')
     fig.update_traces(hovertemplate="<b>%{x}</b><br>" +
                      "%{fullData.name} share: %{y:.1%}" +
@@ -418,8 +444,9 @@ def main():
     fig.update_yaxes(tickformat='.0%')
     st.plotly_chart(fig)
     
-    # Show just scorp income over time
+    
     # Show all income sources over time
+    st.subheader("Figure 8: Share of Income by Source Over Time (2012-2022)")
     income_sources_dist = df.copy()
     income_sources_dist = income_sources_dist[(income_sources_dist['state'] == "IL")]
     income_sources_dist = income_sources_dist[["year", 'agi_stub', "inc", "wages", "interest", 
@@ -439,7 +466,6 @@ def main():
     fig = px.line(income_sources_dist, 
                   x='year', 
                   y=['Wages', 'Interest', 'Dividends', 'Business', 'Capital Gains', 'S-Corp'],
-                  title='Figure 8: Share of Income by Source in Illinois (2013-2022)',
                   labels={'year': 'Year', 'value': 'Share of Income', 'variable': 'Income Source'},
                   markers=True)
 
@@ -459,7 +485,11 @@ def main():
     )
 
     st.plotly_chart(fig, use_container_width=True)
-
+    
+    st.subheader("Notes on data source")
+    st.markdown("""Tax return data is generally understood as more accurate source of data on income than survey data (i.e. the Consumer Population Survey or the American Community Survey), due to issues like of top coding which underreports income at the top. However, only a fraction of income is reported. In 2018, only about 60% of income was reported in the US. See [Saez, Emmanuel and Gabriel Zucman. 2020. "The Rise of Income and Wealth Inequality in America: Evidence from Distributional Macroeconomic Accounts." Journal of Economic Perspectives, 34 (4)](https://gabriel-zucman.eu/files/SaezZucman2020JEP.pdf). 
+                
+                """, unsafe_allow_html=True)
 if __name__ == "__main__":
     main()
 
