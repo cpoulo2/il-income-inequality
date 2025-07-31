@@ -61,7 +61,13 @@ Below I provide a summary of findings followed by the income distribution figure
     change = (diff)/y2012
 
     st.markdown(f"""
-                Between 2012 and 2022, total annual gross income in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth in income, however, is shared unevenly across income groups.
+                A scarcity myth pervades budget conversations. This refers to a taken-for-granted belief that we don't have enough to fund public jobs, goods, and services. Most often the scarcity myth acts through the cynical or ignorant omission of the resources our society has to offer, a statistic and analysis virtually never offered. For example, missing from the often mentioned statistics illustrating 'rising expenditures' or 'cost pressures' is the answer to the critical question: in relation to what?   
+                
+                The answer provides crucial contextualizing information about how much our economy produces (how much do we have) and points to questions of social justice: who owns it and who ought to have control over it.
+
+                This analysis of income in Illinois is the first part of looking through publically available data sources to fill this gap in the public conversation around budget deficits and how we resolve them.  
+
+                Between 2012 and 2022, total annual gross income in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth is shared unevenly across income groups.
                 
                 **In 2022, the top 1% and especially millionaires and billionaires (the top 0.5%) recieved a disproportionate share of Illinois' reported income.** 
                 
@@ -79,8 +85,6 @@ Below I provide a summary of findings followed by the income distribution figure
                 
                 Figure 8 provides context for the 2020-2022 trends. An increase in the share of income of capital gains contributed to the 2021 spike in the share of income going to the top 1%. In addition, the share of S corporation income as is slightly increasing. Millionaires and billionaires own about 65% of S corporation income (Figure 5 filtered for "S-Corp") and the top 1% own about 71% (Figure 7).
                 """, unsafe_allow_html=True)
-                
-                
                 
                 
 # First, I show the share of tax filers by income categoery versus their share of income.")
