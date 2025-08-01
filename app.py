@@ -32,16 +32,16 @@ def main():
 
     st.title("Who gets Illinois' income and how do they get it?")
     st.markdown("""
-A scarcity myth pervades public budget debates. This myth—the taken-for-granted belief that we simply don’t have enough to fund public jobs, goods, and services—obscures the true shape of our economy. It operates by omitting the full picture of what our society actually produces and who owns it.
-When statistics and statements about “rising expenditures” or “cost pressures” are invoked, they’re rarely followed by the essential question: in relation to what?
+A scarcity myth limits how the public imagines government budgets and how state and local leaders address deficits. This myth—the taken-for-granted belief that we simply don’t have enough to fund public jobs, goods, and services—obscures the true shape of our economy. It operates by omitting the full picture of what our society actually produces and who owns it.
+When statistics and statements about “rising expenditures” or “cost pressures” are invoked, for instance, they’re rarely followed with the answer to the pivotal question: in relation to what?
 
-In truth, we live in a wealthy society. Each year, individuals and businesses generate trillions of dollars in income and economic value, but public debates seldom contextualize spending within this broader social capacity.
-Raising the question of what we have opens the door to deeper questions of social justice: who owns it, and who gets to decide how it's used? 
+Illinois' economy generates over a trillion dollars a year. It's the 6th largest state economy in the US and the economic powerhouse of the midwest (over $200 million larger than the next largest economy), but public debates almost never contextualize spending within this broader social capacity.
+Raising the question of what we have opens the door to deeper questions of social justice: who owns that value, and who gets to decide how it's used? 
 
-The following analysis is a first attempt to contextualize state and local budget debate. I look at the distribution of reported income in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income) to understand where income is going and how it is acquired. See ["Notes on data source"](#notes-on-data-source) at the bottom. I analyze the following:
-- The share of total income versus share of tax returns filed 1) by income group ([Figure 1](#figure-1-share-of-illinois-total-income-versus-tax-returns-by-income-group-2022)), 2) for millionaire's and billionaire's over time ([Figure 2](#figure-2-millionaires-and-billionaires-share-of-illinois-total-income-versus-tax-returns-2012-2022)), and 3) by income percentile over time ([Figure 3](#figure-3-share-of-illinois-total-income-by-percentile-2013-2022)).
-- Source of income and their share across income groups ([Figure 4](#figure-4-source-of-income-by-income-group-2022) and [Figure 5](#figure-5-share-of-income-source-by-income-group-2022)) and across income percentiles ([Figure 6](#figure-6-source-of-income-by-percentile-2022) and [Figure 7](#figure-7-share-of-income-source-by-percentile-2022)).
-- The share of income by source over time ([Figure 8](#figure-8-share-of-income-by-source-over-time-2012-2022)).
+The following analysis is a first attempt to contextualize state and local budget debates. I look at the distribution of reported income in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income) to understand where income is going and how it is acquired. See ["Notes on data source"](#notes-on-data-source) at the bottom. I analyze the following:
+- The share of total income versus share of tax returns filed 1) by income group ([Figure 1](#figure-1-share-of-income-vs-share-of-tax-returns-by-income-group-2022)), 2) for millionaire's and billionaire's over time ([Figure 2](#figure-2-share-of-income-vs-share-of-tax-returns-for-millionaires-and-billionaires-2012-2022)), and 3) by income percentile over time ([Figure 3](#figure-3-share-of-income-by-percentile-2013-2022)).
+- Source of income and share income source across income groups ([Figure 4](#figure-4-source-of-income-by-income-group-2022) and [Figure 5](#figure-5-share-of-income-source-by-income-group-2022)) and across income percentiles ([Figure 6](#figure-6-source-of-income-by-percentile-2022) and [Figure 7](#figure-7-share-of-income-source-by-percentile-2022)).
+- The share of income by source over time ([Figure 8](#figure-8-share-of-income-by-source-2012-2022)).
 
 Below I provide a summary of findings followed by the income distribution figures.
 """, unsafe_allow_html=True)
@@ -58,32 +58,57 @@ Below I provide a summary of findings followed by the income distribution figure
     top_50 = dfx['agi_50'].unique()[0]
     
     # Get total agi change from 2012 to 2022
-    y2022 = df[(df['year'] == 2022) & (df['state'] == "IL")]['agi'].sum() 
-    y2012 = df[(df['year'] == 2012) & (df['state'] == "IL")]['agi'].sum()
+    y2022 = df[(df['agi_stub'] == 0) & (df['year'] == 2022) & (df['state'] == "IL")]['agi'].sum() 
+    y2012 = df[(df['agi_stub'] == 0) & (df['year'] == 2012) & (df['state'] == "IL")]['agi'].sum()
     
     diff = y2022-y2012
     diff_m = diff/1000000  # Convert to millions
-    y2022_b = y2022 / 1000000000  # Convert to billions
+    y2022_m = y2022 / 1000000  # Convert to millions
     change = (diff)/y2012
+    
+    top1_y2022 = df[(df['agi_stub'] == 10) & (df['year'] == 2022) & (df['state'] == "IL")]['sum_agi_01'].sum()
+    top1_y2012 = df[(df['agi_stub'] == 10) & (df['year'] == 2013) & (df['state'] == "IL")]['sum_agi_01'].sum()
+
+    top1_diff = top1_y2022-top1_y2012
+
+    top1_perc = top1_diff/diff
+
+    total_y2022 = df[(df['agi_stub'] == 10) & (df['year'] == 2022) & (df['state'] == "IL")]['total_agi'].sum()
+    total_y2012 = df[(df['agi_stub'] == 10) & (df['year'] == 2013) & (df['state'] == "IL")]['total_agi'].sum()
+
+
+    top50_y2022 = df[(df['agi_stub'] == 10) & (df['year'] == 2022) & (df['state'] == "IL")]['sum_agi_50'].sum()
+    top50_y2012 = df[(df['agi_stub'] == 10) & (df['year'] == 2013) & (df['state'] == "IL")]['sum_agi_50'].sum()
+
+    bot50_y2022 = total_y2022 - top50_y2022
+    bot50_y2012 = total_y2012 - top50_y2012
+    bot50_diff = bot50_y2022-bot50_y2012
+
+    bot50_perc = bot50_diff/diff
+
+
+
+
+
 
     st.markdown(f"""  
-                Between 2012 and 2022, total annual gross income in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth is shared unevenly across income groups.
+                Between 2013 and 2022, total annual gross income in Illinois increased by \\${diff_m:.0f} million reaching \\${y2022_m:,.0f} million—the largest growth in individual income in the Midwestern economy. This growth was shared unevenly across income groups. The top 1% received {top1_perc:.0%} of this growth, whereas the bottom 50% received {bot50_perc:.0%}.
                 
-                **In 2022, the top 1% and especially millionaires and billionaires (the top 0.5%) recieved a disproportionate share of Illinois' reported income.** 
+                **In 2022, the top 1% and especially millionaires and billionaires (the top 0.5%) received a disproportionate share of Illinois' reported income.** 
                 
-                That year, **the top 1% of Illinois' tax filers claimed about 21% of Illinois's income** (Figure 3)--with a annual gross income threashold of \\${top_01:,.0f}. Millionaires and billionaires (the top one-half of one percent) took home 17% of Illinois' total income (Figure 1). 
+                That year, **the top 1% of Illinois' tax filers claimed about 21% of Illinois's income** (Figure 3)—with an annual gross income threashold of \\${top_01:,.0f}. Millionaires and billionaires (the top one-half of one percent) took home 17% of Illinois' total income (Figure 1). 
                 
-                **Much of the income reported by the top 1%, didn't come from wages or salaries, but from owning things other than their labor (business, equity, and assets).**
+                **Much of the income reported by the top 1% didn't come from wages or salaries, but from owning things other than their labor (business, equity, and assets).**
                 
-                Roughly **three-quarters of the income of the top 1% came from "passive sources"**--which the IRS defines as activities in which the tax filer does not materially participate in, such as S corporation profits, divdends, or capital gains. By contrast, **about 80% of income reported by the bottom half of tax filers came from wages and salaries** (Figure 6). 
+                Roughly **three-quarters of the income of the top 1% came from "passive sources"**—which the IRS defines as activities in which the tax filer does not materially participate, such as S corporation profits, dividends, or capital gains. By contrast, **about 80% of income reported by the bottom half of tax filers came from wages and salaries** (Figure 6). 
                 
                 Viewed from another perspective, the lion's share of passive income flowed to the very top. For example, **71% of all capital gains income and 65% of all S corporation income** went to millionaires and billionaires (Figure 5).  
                 
                 **Since 2020, the share of income going to the top 1% and the top 0.5% has grown.** 
                 
-                Prior to COVID, millionaires' and billionaires' averaged about 14% of total income between 2012 and 2020. That share increased to 20% between 2021 and 2022 (Figure 2). 
+                Prior to COVID, millionaires and billionaires averaged about 14% of total income between 2012 and 2020. That share increased to 20% between 2021 and 2022 (Figure 2). 
                 
-                Figure 8 provides context for the 2020-2022 trends. An increase in the share of income of capital gains contributed to the 2021 spike in the share of income going to the top 1%. In addition, the share of S corporation income as is slightly increasing. Millionaires and billionaires own about 65% of S corporation income (Figure 5 filtered for "S-Corp") and the top 1% own about 71% (Figure 7).
+                Figure 8 provides context for the 2020–2022 trends. An increase in the share of income of capital gains contributed to the 2021 spike in the share of income going to the top 1%. In addition, the share of S corporation income is slightly increasing. Millionaires and billionaires own about 65% of S corporation income (Figure 5, filtered for "S-Corp") and the top 1% own about 71% (Figure 7).
                 """, unsafe_allow_html=True)
                 
                 
@@ -94,7 +119,7 @@ Below I provide a summary of findings followed by the income distribution figure
 #     st.markdown(" - Post-COVID income shares among the top 1%, 5%, and 10% seem to have increased slightly post-COVID (Fig. 3).")
         
     # Income categoery data
-    st.subheader("Figure 1: Share of Illinois' Total Income Versus Tax Returns by Income Group (2022)")
+    st.subheader("Figure 1: Share of Income vs. Share of Tax Returns by Income Group (2022)")
     # Remove agi_stub_cat = 0
     amt_dist = df[df['agi_stub'] != 0]
     amt_dist = amt_dist[(amt_dist['year'] == 2022) & (amt_dist['state'] == "IL")]
@@ -138,7 +163,7 @@ Below I provide a summary of findings followed by the income distribution figure
     st.plotly_chart(fig, use_container_width=True)
      
     
-    st.subheader("Figure 2: Millionaires' and Billionaires' Share of Illinois' Total Income Versus Tax Returns (2012-2022)")
+    st.subheader("Figure 2: Share of Income vs. Share of Tax Returns for Millionaires and Billionaires (2012–2022)")
     
     # Millionaire and billionaire share of income over time
     
@@ -189,7 +214,7 @@ Below I provide a summary of findings followed by the income distribution figure
     # Show the chart
     st.plotly_chart(fig, use_container_width=True)
     
-    st.subheader("Figure 3: Share of Illinois\' Total Income by Percentile (2013-2022)")
+    st.subheader("Figure 3: Share of Income by Percentile (2013–2022)")
     
     # Percentile data
     
@@ -450,7 +475,7 @@ Below I provide a summary of findings followed by the income distribution figure
     
     
     # Show all income sources over time
-    st.subheader("Figure 8: Share of Income by Source Over Time (2012-2022)")
+    st.subheader("Figure 8: Share of Income by Source (2012–2022)")
     income_sources_dist = df.copy()
     income_sources_dist = income_sources_dist[(income_sources_dist['state'] == "IL")]
     income_sources_dist = income_sources_dist[["year", 'agi_stub', "inc", "wages", "interest", 
@@ -491,7 +516,7 @@ Below I provide a summary of findings followed by the income distribution figure
     st.plotly_chart(fig, use_container_width=True)
     
     st.subheader("Notes on data source")
-    st.markdown("""Tax return data is generally understood as more accurate source of data on income than survey data (i.e. the Consumer Population Survey or the American Community Survey), due to issues like of top coding which underreports income at the top. However, only a fraction of income is reported. In 2018, only about 60% of income was reported in the US. See [Saez, Emmanuel and Gabriel Zucman. 2020. "The Rise of Income and Wealth Inequality in America: Evidence from Distributional Macroeconomic Accounts." Journal of Economic Perspectives, 34 (4)](https://gabriel-zucman.eu/files/SaezZucman2020JEP.pdf). 
+    st.markdown("""While tax data is ideal for empirically capturing top incomes, it only captures a fraction of national income recorded in national accounts. In 2018, only about 60% of national income was reported in individual income tax data (Saez and Zucman, 2020). See [Saez, Emmanuel and Gabriel Zucman. 2020. "The Rise of Income and Wealth Inequality in America: Evidence from Distributional Macroeconomic Accounts." Journal of Economic Perspectives, 34 (4)](https://gabriel-zucman.eu/files/SaezZucman2020JEP.pdf). 
                 
                 """, unsafe_allow_html=True)
 if __name__ == "__main__":
