@@ -32,8 +32,6 @@ def main():
 
     st.title("Who gets Illinois' income and how do they get it?")
     st.markdown("""
-**Introduction**
-
 A scarcity myth pervades public budget debates. This myth—the taken-for-granted belief that we simply don’t have enough to fund public jobs, goods, and services—obscures the true shape of our economy. It operates by omitting the full picture of what our society actually produces and who owns it.
 When statistics and statements about “rising expenditures” or “cost pressures” are invoked, they’re rarely followed by the essential question: in relation to what?
 
