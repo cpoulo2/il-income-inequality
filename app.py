@@ -32,7 +32,15 @@ def main():
 
     st.title("Who gets Illinois' income and how do they get it?")
     st.markdown("""
-The following analysis looks at distribution of reported income in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income). See ["Notes on data source"](#notes-on-data-source) at the bottom. I analyze the following:
+**Introduction**
+
+A scarcity myth pervades public budget debates. This myth—the taken-for-granted belief that we simply don’t have enough to fund public jobs, goods, and services—obscures the true shape of our economy. It operates by omitting the full picture of what our society actually produces and who owns it.
+When statistics and statements about “rising expenditures” or “cost pressures” are invoked, they’re rarely followed by the essential question: in relation to what?
+
+In truth, we live in a wealthy society. Each year, individuals and businesses generate trillions of dollars in income and economic value, but public debates seldom contextualize spending within this broader social capacity.
+Raising the question of what we have opens the door to deeper questions of social justice: who owns it, and who gets to decide how it's used? 
+
+The following analysis is a first attempt to contextualize state and local budget debate. I look at the distribution of reported income in Illinois using IRS [Statistics of Income (SOI) data]( https://www.irs.gov/statistics/soi-tax-stats-statistics-of-income) to understand where income is going and how it is acquired. See ["Notes on data source"](#notes-on-data-source) at the bottom. I analyze the following:
 - The share of total income versus share of tax returns filed 1) by income group ([Figure 1](#figure-1-share-of-illinois-total-income-versus-tax-returns-by-income-group-2022)), 2) for millionaire's and billionaire's over time ([Figure 2](#figure-2-millionaires-and-billionaires-share-of-illinois-total-income-versus-tax-returns-2012-2022)), and 3) by income percentile over time ([Figure 3](#figure-3-share-of-illinois-total-income-by-percentile-2013-2022)).
 - Source of income and their share across income groups ([Figure 4](#figure-4-source-of-income-by-income-group-2022) and [Figure 5](#figure-5-share-of-income-source-by-income-group-2022)) and across income percentiles ([Figure 6](#figure-6-source-of-income-by-percentile-2022) and [Figure 7](#figure-7-share-of-income-source-by-percentile-2022)).
 - The share of income by source over time ([Figure 8](#figure-8-share-of-income-by-source-over-time-2012-2022)).
@@ -60,13 +68,7 @@ Below I provide a summary of findings followed by the income distribution figure
     y2022_b = y2022 / 1000000000  # Convert to billions
     change = (diff)/y2012
 
-    st.markdown(f"""
-                A scarcity myth pervades budget conversations. This refers to a taken-for-granted belief that we don't have enough to fund public jobs, goods, and services. Most often the scarcity myth acts through the cynical or ignorant omission of the resources our society has to offer, a statistic and analysis virtually never offered. For example, missing from the often mentioned statistics illustrating 'rising expenditures' or 'cost pressures' is the answer to the critical question: in relation to what?   
-                
-                The answer provides crucial contextualizing information about how much our economy produces (how much do we have) and points to questions of social justice: who owns it and who ought to have control over it.
-
-                This analysis of income in Illinois is the first part of looking through publically available data sources to fill this gap in the public conversation around budget deficits and how we resolve them.  
-
+    st.markdown(f"""  
                 Between 2012 and 2022, total annual gross income in Illinois increased by \\${diff_m:.1f} million reaching \\${y2022_b:,.1f} billion. The growth is shared unevenly across income groups.
                 
                 **In 2022, the top 1% and especially millionaires and billionaires (the top 0.5%) recieved a disproportionate share of Illinois' reported income.** 
